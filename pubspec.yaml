@@ -10,8 +10,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  whisk_and_serve:
-    path: ../whisk-and-serve
 
 dev_dependencies:
   flutter_test:
