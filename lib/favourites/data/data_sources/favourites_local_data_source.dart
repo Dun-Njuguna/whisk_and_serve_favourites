@@ -22,7 +22,14 @@ class FavouritesLocalDataSourceImpl implements FavouritesLocalDataSource {
 
   @override
   Future<bool> deleteRecipe(MealDetails meal) async {
-    return _favouriteRecipes.remove(meal);
+    final initialLength = _favouriteRecipes.length;
+
+    _favouriteRecipes.removeWhere((item) {
+      return item.id == meal.id;
+    });
+
+    return _favouriteRecipes.length <
+        initialLength; // Return true if an item was removed
   }
 
   @override

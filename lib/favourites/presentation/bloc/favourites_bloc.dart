@@ -84,7 +84,6 @@ class FavouritesBloc extends BaseBloc<FavouritesEvent, FavouritesState> {
 
   Future<void> _removeFromFavourites(MealDetails meal) async {
     final success = await removeFromFavourites.call(meal);
-
     GlobalEventBus.trigger(FavouritesBusResponse(
       mealId: meal.id,
       isFavourite: !success,
@@ -92,6 +91,9 @@ class FavouritesBloc extends BaseBloc<FavouritesEvent, FavouritesState> {
       message:
           success ? "Removed successfully" : "Failed to remove from favourites",
     ));
+    if (success) {
+      add(FetchFavourites());
+    }
   }
 
   void _handleIsFavouriteQuery(String mealId) async {

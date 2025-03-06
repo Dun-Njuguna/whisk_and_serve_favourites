@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:whisk_and_serve_core/bloc/bloc_helpers.dart';
 import 'package:whisk_and_serve_core/entities/explore/meal_details.dart';
+import 'package:whisk_and_serve_core/router/app_routes.dart';
+import 'package:whisk_and_serve_core/router/router.dart';
 import 'package:whisk_and_serve_core/widgets/base_scaffold.dart';
 import 'package:whisk_and_serve_favourites/favourites/presentation/bloc/favourites_bloc.dart';
 
@@ -24,14 +26,12 @@ class _FavouritesState extends State<Favourites> {
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
-      title: "Favourites",
       child: createBlocBuilder<FavouritesBloc, FavouritesState>(
         builder: (context, state) {
           if (state is FavouritesLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is FavouritesLoaded) {
             final favourites = state.favourites;
-            print("favourites   $favourites");
             if (favourites.isEmpty) {
               return Center(
                 child: Text("No favourites added yet!",
@@ -42,11 +42,10 @@ class _FavouritesState extends State<Favourites> {
             }
             return Padding(
               padding: const EdgeInsets.only(
-                left: 8,
-                right: 8,
-                bottom: 8,
+                bottom: 50,
               ),
               child: ListView.builder(
+                padding: EdgeInsets.zero,
                 itemCount: favourites.length,
                 itemBuilder: (context, index) {
                   final meal = favourites[index];
@@ -72,13 +71,16 @@ class FavouriteMealCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+      margin: const EdgeInsets.only(
+        bottom: 8,
+        left: 8,
+        right: 8,
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
       elevation: 4,
       child: ListTile(
-        contentPadding: const EdgeInsets.all(12),
         leading: ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: Image.network(
@@ -108,7 +110,8 @@ class FavouriteMealCard extends StatelessWidget {
         ),
         onTap: () {
           // Navigate to meal details (Explore module)
-          Navigator.pushNamed(context, '/mealDetails', arguments: meal.id);
+          NavigationHelper.navigateTo(
+              context, '/${AppRoutes.meals}/${meal.category}/${meal.id}');
         },
       ),
     );
