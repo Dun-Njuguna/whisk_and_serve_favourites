@@ -70,49 +70,53 @@ class FavouriteMealCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.only(
-        bottom: 8,
-        left: 8,
-        right: 8,
-      ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      elevation: 4,
-      child: ListTile(
-        leading: ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Image.network(
-            meal.thumbnail,
-            width: 80,
-            height: 80,
-            fit: BoxFit.cover,
-          ),
+    return GestureDetector(
+      onTap: () {
+        NavigationHelper.navigateTo(
+            context, '/${AppRoutes.meals}/${meal.category}/${meal.id}');
+      },
+      child: Card(
+        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
         ),
-        title: Text(
-          meal.name,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
+        elevation: 4,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(16)),
+              child: Image.network(
+                meal.thumbnail,
+                width: double.infinity,
+                height: 200,
+                fit: BoxFit.cover,
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    meal.name,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "${meal.category} | ${meal.area}",
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Colors.grey[600],
+                        ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-        subtitle: Text(
-          "${meal.category} | ${meal.area}",
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
-        trailing: IconButton(
-          icon: const Icon(Icons.favorite, color: Colors.red),
-          onPressed: () {
-            // Trigger remove favourite event here
-            // BlocProvider.of<FavouritesBloc>(context)
-            //     .add(RemoveFromFavouritesEvent(meal));
-          },
-        ),
-        onTap: () {
-          // Navigate to meal details (Explore module)
-          NavigationHelper.navigateTo(
-              context, '/${AppRoutes.meals}/${meal.category}/${meal.id}');
-        },
       ),
     );
   }
